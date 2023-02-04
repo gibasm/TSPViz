@@ -1,5 +1,4 @@
 #include "app.hpp"
-#include <SDL2/SDL.h>
 #include <stdexcept>
 
 static constexpr WindowConfig config = {
@@ -13,7 +12,9 @@ App::App()
 :window(config){}
 
 
-App::~App() {}
+App::~App() {
+    SDL_Quit();
+}
 
 
 void App::init_SDL() {
