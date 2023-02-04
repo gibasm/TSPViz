@@ -1,6 +1,6 @@
 # Copyright (c) 2023 Michał Gibas
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.6)
 project(tspviz)
 
 ### project settings ###
@@ -14,6 +14,13 @@ set(APP_TARGET_NAME tspviz)
 
 # tests executable file name
 set(TEST_TARGET_NAME tspviz_test)
+
+# warning level
+if (MSVC)
+    add_compile_options(/W4 /WX)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
 
 ######
 
