@@ -1,6 +1,6 @@
 # Copyright (c) 2023 Michał Gibas
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.15)
 project(tspviz)
 
 ### project settings ###
@@ -25,11 +25,15 @@ endif()
 ######
 
 ### app source files ###
-set(APP_SOURCES_PATH src/app)
+set(APP_SOURCES_PATH src/app/)
 
 set(APP_SOURCES
-    ${APP_SOURCES_PATH}/main.cpp
+    main.cpp
+    gfx/window.cpp
+    app.cpp
 )
+
+list(TRANSFORM APP_SOURCES PREPEND ${APP_SOURCES_PATH})
 
 ### logging ###
 if(NOT TARGET spdlog)
@@ -37,20 +41,26 @@ if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
+### graphics ###
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
 ### app build ###
 add_executable(
     ${APP_TARGET_NAME} ${APP_SOURCES}
 )
 target_link_libraries(
-    ${APP_TARGET_NAME} PRIVATE spdlog::spdlog
+    ${APP_TARGET_NAME} PRIVATE spdlog::spdlog ${SDL2_LIBRARIES}
 )
 
 ### test source files ###
-set(TEST_SOURCES_PATH src/tests)
+set(TEST_SOURCES_PATH src/tests/)
 
 set(TEST_SOURCES
-    ${TEST_SOURCES_PATH}/main_test.cpp
+    main_test.cpp
 )
+
+list(TRANSFORM TEST_SOURCES PREPEND ${TEST_SOURCES_PATH})
 
 ### tests ###
 # fetch GoogleTest
