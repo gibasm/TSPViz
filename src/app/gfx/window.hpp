@@ -26,12 +26,19 @@ public:
      */
     void show();
 
+    /**
+     * @brief map a SDL event to a callback function
+     * 
+     * @param event_type SDL_Event::type
+     * @param callback callback function void(*)(const SDL_Event& event)
+     */
     inline void set_event_callback(uint32_t event_type, EventCallback callback);
 
 private:
     typedef std::map<uint32_t, EventCallback> CallbackMap;
     
     SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
     
     WindowConfig config;
     CallbackMap callbacks;

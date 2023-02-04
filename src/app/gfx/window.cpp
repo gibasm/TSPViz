@@ -7,6 +7,7 @@ MainWindow::MainWindow(const WindowConfig& config) {
 }
 
 MainWindow::~MainWindow() {
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
 
@@ -28,22 +29,29 @@ void MainWindow::show() {
         throw std::runtime_error("Cannot open a window! Reason:" + std::string(SDL_GetError()));
     }
 
-    bool open = true;
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    
+    if(renderer == nullptr) {
+        throw std::runtime_error("Cannot open a renderer! Reason:" + std::string(SDL_GetError()));
+    }
 
+    bool open = true;
+    SDL_Event event;
     while(open) {
-        SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
                 open = false;
                 break;
             }
-
+            /* find if a event is mapped to a callback */
             if(callbacks.find(event.type) != callbacks.end()) {
                 callbacks.at(event.type)(event);
             }
         } /* while */
-        
+
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
     } /* while */
 
 }
