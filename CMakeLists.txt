@@ -31,9 +31,18 @@ set(APP_SOURCES
     ${APP_SOURCES_PATH}/main.cpp
 )
 
+### logging ###
+if(NOT TARGET spdlog)
+    # Stand-alone build
+    find_package(spdlog REQUIRED)
+endif()
+
 ### app build ###
 add_executable(
     ${APP_TARGET_NAME} ${APP_SOURCES}
+)
+target_link_libraries(
+    ${APP_TARGET_NAME} PRIVATE spdlog::spdlog
 )
 
 ### test source files ###
@@ -42,8 +51,6 @@ set(TEST_SOURCES_PATH src/tests)
 set(TEST_SOURCES
     ${TEST_SOURCES_PATH}/main_test.cpp
 )
-
-
 
 ### tests ###
 # fetch GoogleTest
