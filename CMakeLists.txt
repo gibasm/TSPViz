@@ -30,6 +30,8 @@ set(APP_SOURCES_PATH src/app/)
 set(APP_SOURCES
     main.cpp
     gfx/window.cpp
+    gfx/graph.cpp
+    instance.cpp
     app.cpp
 )
 

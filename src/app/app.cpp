@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include <stdexcept>
+#include "gfx/graph.hpp"
 
 static constexpr WindowConfig config = {
     "TSPViz",
@@ -7,9 +8,11 @@ static constexpr WindowConfig config = {
     600U
 };
 
-
-App::App() 
-:window(config){}
+App::App(const char* instance_file_name) 
+:window(config), instance(instance_file_name) {
+    graph = std::make_unique<Graph>(instance.get_vertices());
+    window.add_to_draw_list(graph.get());
+}
 
 
 App::~App() {
