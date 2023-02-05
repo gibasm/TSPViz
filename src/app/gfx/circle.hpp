@@ -3,10 +3,13 @@
 #include "drawable.hpp"
 #include <cmath>
 
+/**
+ * @brief Simple, white circle. Used to represent graph vertices.
+ * 
+ * @tparam N number of points of the circle 
+ */
 template <size_t N = 64> 
 class Circle :public Drawable {
-    SDL_FPoint points[N];
-    SDL_FPoint center;
 public:
     constexpr Circle(float radius = 1.0f, SDL_FPoint center = {0.0f, 0.0f}) {
         this->center = center;
@@ -29,6 +32,10 @@ public:
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderDrawLinesF(renderer, points, N);
     }
+    
+private:
+    SDL_FPoint points[N];
+    SDL_FPoint center;
 };
 
 #endif /* CIRCLE_HPP */
