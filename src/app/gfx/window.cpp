@@ -11,10 +11,6 @@ MainWindow::~MainWindow() {
     SDL_DestroyWindow(window);
 }
 
-inline void MainWindow::set_event_callback(uint32_t event_type, EventCallback callback) {
-    callbacks.insert(std::make_pair(event_type, callback));
-}
-
 void MainWindow::show() {
     window = SDL_CreateWindow(
         config.title, 
@@ -51,6 +47,11 @@ void MainWindow::show() {
         } /* while */
 
         SDL_RenderClear(renderer);
+        
+        for(const auto& drawable : draw_list) {
+            drawable->draw(renderer);
+        }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
         SDL_RenderPresent(renderer);
     } /* while */
 
