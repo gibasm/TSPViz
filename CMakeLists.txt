@@ -28,7 +28,6 @@ endif()
 set(APP_SOURCES_PATH src/app/)
 
 set(APP_SOURCES
-    main.cpp
     gfx/window.cpp
     gfx/graph.cpp
     instance.cpp
@@ -49,7 +48,7 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 ### app build ###
 add_executable(
-    ${APP_TARGET_NAME} ${APP_SOURCES}
+    ${APP_TARGET_NAME} ${APP_SOURCES} src/app/main.cpp
 )
 target_link_libraries(
     ${APP_TARGET_NAME} PRIVATE spdlog::spdlog ${SDL2_LIBRARIES}
@@ -59,7 +58,7 @@ target_link_libraries(
 set(TEST_SOURCES_PATH src/tests/)
 
 set(TEST_SOURCES
-    main_test.cpp
+    instance_test.cpp
 )
 
 list(TRANSFORM TEST_SOURCES PREPEND ${TEST_SOURCES_PATH})
@@ -81,10 +80,13 @@ enable_testing()
 add_executable(
   ${TEST_TARGET_NAME}
   ${TEST_SOURCES}
+  ${APP_SOURCES}
 )
 target_link_libraries(
   ${TEST_TARGET_NAME}
   GTest::gtest_main
+  spdlog::spdlog 
+  ${SDL2_LIBRARIES}
 )
 
 include(GoogleTest)
