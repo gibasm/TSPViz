@@ -32,6 +32,8 @@ tspviz <instance>.tsp
 
 ## Steps (GNU/Linux):
 
+0. Make sure you've got all of the [dependencies](#dependencies) installed on your system.
+
 1. Open a terminal and type:
 ```
 git clone <url to this repo> 
@@ -40,4 +42,20 @@ git clone <url to this repo>
 2. Go to the cloned repository's directory
 and create a directory named ``build``
 
-3. 
+3. Type:
+```
+cmake ..
+```
+
+then:
+
+```
+make
+```
+
+4. [Run the app](#usage)
+
+5. Test by typing:
+```
+ctest
+```
