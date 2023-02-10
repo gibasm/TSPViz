@@ -15,6 +15,10 @@ Phenotype OXCrossover::crossover(const std::vector<Phenotype>& parents) {
     /* choose the points of crossover randomly */
     std::uniform_int_distribution<size_t> dist(0UL, genome_length);
     size_t start = dist(e), end = dist(e);
+    
+    if(start > end) {
+        std::swap(start, end);
+    }
 
     /* create an array indicating the already passed genes */
     std::unique_ptr<bool[]> used = std::make_unique<bool[]>(genome_length);
