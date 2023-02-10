@@ -15,9 +15,11 @@ TEST(CrossoverTest, test_XOCrossover) {
     OXCrossover method;
 
     /* When: */
-    Phenotype child = method.crossover({parent_a, parent_b});
+    auto children = method.crossover({parent_a, parent_b});
+    Phenotype child = children.at(0);
 
     /* Then: */
+    ASSERT_EQ(children.size(), 2);
 
     /* the child has the same length as it's parents */
     ASSERT_EQ(child.get_genome().size(), parent_a.get_genome().size());

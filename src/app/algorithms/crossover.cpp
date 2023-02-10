@@ -7,7 +7,9 @@
 static std::random_device r;
 static std::mt19937 e(r());
 
-Phenotype OXCrossover::crossover(const std::vector<Phenotype>& parents) {
+static Phenotype get_ox_child(const Phenotype& parent_a, const Phenotype& parent_b, size_t start, size_t end);
+
+std::vector<Phenotype> OXCrossover::crossover(const std::vector<Phenotype>& parents) {
     /* this OX crossover implementation works only for 2 parents! */
     assert(parents.size() == 2UL);
     size_t genome_length = parents.at(0).get_genome().size();
@@ -19,9 +21,20 @@ Phenotype OXCrossover::crossover(const std::vector<Phenotype>& parents) {
     if(start > end) {
         std::swap(start, end);
     }
+    
+    std::vector<Phenotype> children;
+    children.push_back(get_ox_child(parents.at(0), parents.at(1), start, end));
+    children.push_back(get_ox_child(parents.at(1), parents.at(0), start, end));
+
+    return children;
+} 
+
+Phenotype get_ox_child(const Phenotype& parent_a, const Phenotype& parent_b, size_t start, size_t end) {
+    size_t genome_length = parent_a.get_genome().size();
 
     /* create an array indicating the already passed genes */
     std::unique_ptr<bool[]> used = std::make_unique<bool[]>(genome_length);
+
 
     for(size_t i = 0; i < genome_length; ++i) {
         used[i] = false;
@@ -30,9 +43,6 @@ Phenotype OXCrossover::crossover(const std::vector<Phenotype>& parents) {
     /* create a child's genome */
     std::vector<size_t> child_genome;
     child_genome.resize(genome_length);
-
-    Phenotype parent_a = parents.at(0);
-    Phenotype parent_b = parents.at(1);
 
     /* pass the genes of the first parent between the points of crossover */
     for(size_t i = start; i < end; ++i) {
@@ -64,7 +74,6 @@ Phenotype OXCrossover::crossover(const std::vector<Phenotype>& parents) {
         /* move to the next gene of the parent_b */
         ++parent_gene_index;
     } /* while */
-    
 
     return Phenotype(child_genome);
-} 
+}

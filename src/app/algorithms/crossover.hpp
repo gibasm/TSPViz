@@ -5,7 +5,7 @@
 
 class CrossoverStrategy {
 public:
-    virtual Phenotype crossover(const std::vector<Phenotype>& parents) = 0;
+    virtual std::vector<Phenotype> crossover(const std::vector<Phenotype>& parents) = 0;
 };
 
 /**
@@ -16,7 +16,7 @@ public:
     constexpr OXCrossover() = default;
     virtual ~OXCrossover() = default;
 
-    virtual Phenotype crossover(const std::vector<Phenotype>& parents) override;
+    virtual std::vector<Phenotype> crossover(const std::vector<Phenotype>& parents) override;
 };
 
 #endif /* CROSSOVER_HPP */
