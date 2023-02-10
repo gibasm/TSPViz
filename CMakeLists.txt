@@ -31,6 +31,7 @@ set(APP_SOURCES
     algorithms/phenotype.cpp
     algorithms/crossover.cpp
     algorithms/tsp_solver.cpp
+    algorithms/mutator.cpp
     gfx/window.cpp
     gfx/graph.cpp
     instance.cpp
@@ -64,6 +65,7 @@ set(TEST_SOURCES
     instance_test.cpp
     crossover_test.cpp
     phenotype_test.cpp
+    mutator_test.cpp
 )
 
 list(TRANSFORM TEST_SOURCES PREPEND ${TEST_SOURCES_PATH})
