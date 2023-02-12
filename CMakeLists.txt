@@ -28,6 +28,8 @@ endif()
 set(APP_SOURCES_PATH src/app/)
 
 set(APP_SOURCES
+    algorithms/ga_builder.cpp
+    algorithms/genetic.cpp
     algorithms/phenotype.cpp
     algorithms/crossover.cpp
     algorithms/tsp_solver.cpp
