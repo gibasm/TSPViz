@@ -31,6 +31,8 @@ void MainWindow::show() {
         throw std::runtime_error("Cannot open a renderer! Reason:" + std::string(SDL_GetError()));
     }
 
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    
     bool open = true;
     SDL_Event event;
     while(open) {

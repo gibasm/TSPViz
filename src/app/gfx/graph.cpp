@@ -6,6 +6,9 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+#define DEFAULT_COLOR {0x41, 0x41, 0x41, 0x40}
+#define HIGHLIGHT_COLOR {0xFF, 0x41, 0x41, 0xFF}
+
 Graph::Graph(std::vector<std::array<float, 2>> instance) {
     this->vertex_count = instance.size();
 
@@ -42,7 +45,7 @@ Graph::Graph(std::vector<std::array<float, 2>> instance) {
 
             SDL_FPoint end = vertices[j].get_center();
             edges[edge_no] = std::make_pair(start, end);
-            edge_colors[edge_no] = {0x41, 0x41, 0x41, 10};
+            edge_colors[edge_no] = DEFAULT_COLOR;
             ++edge_no;
         }
     }
@@ -56,11 +59,11 @@ Graph::~Graph() {
 void Graph::highlight_edge(size_t start, size_t end, bool highlight) {
     assert(start != end);
     if(highlight) {
-        edge_colors[edge_mapping[start][end]] = {0xFF, 0x41, 0x41, 0xFF};
+        edge_colors[edge_mapping[start][end]] = HIGHLIGHT_COLOR;
         return;
     }
 
-    edge_colors[edge_mapping[start][end]] = {0x41, 0x41, 0x41, 10};
+    edge_colors[edge_mapping[start][end]] = DEFAULT_COLOR;
 }
 
 void Graph::draw(SDL_Renderer* renderer) {
