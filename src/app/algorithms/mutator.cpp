@@ -13,8 +13,6 @@ void SwapMutator::mutate(std::vector<size_t>& genome) const {
         
         std::swap(genome[a], genome[b]);
     }
-
-    genome.at(0) = 111;
 }
 
 SwapMutator::SwapMutator(size_t swap_count) {
