@@ -28,6 +28,8 @@ endif()
 set(APP_SOURCES_PATH src/app/)
 
 set(APP_SOURCES
+    util/ini_loader.cpp
+    algorithms/solver_factory.cpp
     algorithms/ga_builder.cpp
     algorithms/genetic.cpp
     algorithms/phenotype.cpp
@@ -50,7 +52,10 @@ endif()
 
 ### graphics ###
 find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(
+    ${SDL2_INCLUDE_DIRS}
+    vendor/mINI/src/    
+)
 
 ### app build ###
 add_executable(

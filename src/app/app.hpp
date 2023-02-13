@@ -4,6 +4,8 @@
 #include "gfx/window.hpp"
 #include "gfx/graph.hpp"
 #include "instance.hpp"
+#include "algorithms/tsp_solver.hpp"
+#include <thread>
 
 class App {
 public:
@@ -16,8 +18,11 @@ protected:
 
 private:
     MainWindow window;
+    std::unique_ptr<TSPSolver> solver;
     std::unique_ptr<Graph> graph;
     TSPInstance instance;
+
+    std::thread window_thread;
 };
 
 #endif /* APP_HPP */

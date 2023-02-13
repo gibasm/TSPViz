@@ -10,14 +10,46 @@ The app is meant as an educational, fun to watch vizualization of popular algori
 
 # Usage:
 
-**Note:**
-The application is still in the early stage of development, it lacks: algorithm implementations, test coverage, deployments and other additional CI/CD pipelines. The fully functional app should arrive in few weeks.
+1. Get/create a *.tsp file:
+
+
+Sample symmetric TSP instances to test can be found on [Heidelberd University's website](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/).
+
+
+**Warning:** TSPViz supports only instances in [TSPLIB95 EUC_2D](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format!
+
+
+2. Create a ***config.ini*** file in the directory of your *.tsp file(s). 
+
+
+Here's a sample solver config file's content (***config.ini***):
+
+```ini
+algorithm_type = GA
+iterations = 30000
+population_size = 100
+crossover_method = OX
+mutation_method = SWAP
+p_mutation = 0.4
+```
+
+* GA - genetic algorithm
+
+* p_mutation - probability of mutation
+
+
+3. Run:
+
 
 ```
 tspviz <instance>.tsp
 ```
 
-**Warning:** TSPViz supports only instances in TSPLIB95 EUC_2D format!
+or if you want to see the current best path cost in the terminal:
+
+```
+tpsviz <instance>.tsp -d
+```
 
 # Building & testing
 
