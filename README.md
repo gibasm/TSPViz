@@ -13,7 +13,7 @@ The app is meant as an educational, fun to watch vizualization of popular algori
 1. Get/create a *.tsp file:
 
 
-Sample symmetric TSP instances to test can be found on [Heidelberd University's website](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/).
+Sample symmetric TSP instances to test can be found on [Heidelberg University's website](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/).
 
 
 **Warning:** TSPViz supports only instances in [TSPLIB95 EUC_2D](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format!
