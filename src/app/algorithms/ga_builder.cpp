@@ -32,8 +32,11 @@ GeneticAlgorithmBuilder& GeneticAlgorithmBuilder::mutation_type(MutationType typ
             this->mutator = std::make_shared<SwapMutator>();
             break;
         }
+        case MutationType::INVERT:{
+            this->mutator = std::make_shared<InvertMutator>();
+            break;
+        }
         case MutationType::INSERT:
-        case MutationType::INVERT:
         default: {
             throw std::runtime_error("This type of mutation is not yet supported!");
         }
