@@ -1,4 +1,4 @@
-name: CI (GNU/Linux)
+name: GNU/Linux build
 
 on:
   push:
