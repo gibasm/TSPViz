@@ -14,6 +14,8 @@ static constexpr WindowConfig config = {
 
 App::App(const char* instance_file_name) 
 :window(config), instance(instance_file_name) {
+    init_SDL();
+    
     graph = std::make_unique<Graph>(instance.get_vertices());
     window.add_to_draw_list(graph.get());
 
