@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <string>
 
+extern bool ga_stop;
+
 MainWindow::MainWindow(const WindowConfig& config) {
     this->config = config;
 }
@@ -40,6 +42,7 @@ void MainWindow::show() {
         while (SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
                 open = false;
+                ga_stop = true;
                 break;
             }
             /* find if a event is mapped to a callback */

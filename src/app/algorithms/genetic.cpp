@@ -9,6 +9,8 @@
 static std::random_device r;
 static std::mt19937 e(r());
 
+bool ga_stop = false;
+
 GeneticAlgorithm::GeneticAlgorithm(TSPInstance& instance, Graph& graph)
 :TSPSolver(instance, graph) {}
 
@@ -29,7 +31,8 @@ void GeneticAlgorithm::solve() {
     costs = std::make_unique<float[]>(population_size);
 
     for(size_t iteration = 0; iteration < max_iterations; ++iteration) {
-        
+        if(ga_stop) break;
+
         rate_individuals();
         select_parents();
         crossover();

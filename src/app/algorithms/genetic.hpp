@@ -5,6 +5,8 @@
 #include "mutator.hpp"
 #include "crossover.hpp"
 
+extern bool ga_stop;
+
 class GeneticAlgorithm :public TSPSolver {
 public:
     GeneticAlgorithm(TSPInstance& instance, Graph& graph);
