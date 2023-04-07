@@ -14,8 +14,18 @@ typedef std::vector<std::vector<float>> GraphMatrix;
 class TSPInstance {
 
 public:
+    /**
+     * @brief Loads a *.tsp instance from a file
+     * 
+     * @param file_name 
+     */
     TSPInstance(const char* file_name);
     
+    /**
+     * @brief Construct a new TSPInstance object based on vertex list
+     * 
+     * @param vertices list of vertices as a list of points on a 2D eculidean plane [[x, y], ...]
+     */
     TSPInstance(std::vector<std::array<float, 2>> vertices);
 
     virtual ~TSPInstance();
@@ -25,6 +35,7 @@ public:
     inline size_t get_vertex_count() const { return vertices.size(); }
 
     GraphMatrix get_neighborhood_matrix();
+
 private:
     void load_from_file(const char* file_name);
     GraphMatrix matrix;
