@@ -29,6 +29,7 @@ set(APP_SOURCES_PATH src/app/)
 
 set(APP_SOURCES
     util/ini_loader.cpp
+    util/perf_clock.cpp
     algorithms/solver_factory.cpp
     algorithms/ga_builder.cpp
     algorithms/genetic.cpp
