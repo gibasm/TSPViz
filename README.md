@@ -4,8 +4,7 @@
 [![CI/Build](https://github.com/TheMadMike/TSPViz/actions/workflows/cmake.yml/badge.svg)](https://github.com/TheMadMike/TSPViz/actions/workflows/cmake.yml)
 
 
-The app is meant as an educational, fun to watch vizualization of popular algorithms used to solve the Travelling Salesperson Problem: Genetic Algorithms, and algorithms using the Ant Colony Optimization (otherwise known as "ant algorithms").
-
+The app is meant as an educational, fun to watch vizualization of genetic algorithms used to solve the Travelling Salesperson Problem.
 ![tspviz sample screenshot](https://github.com/TheMadMike/TSPViz/blob/main/screenshots/tspviz.png?raw=true)
 
 # Usage:
