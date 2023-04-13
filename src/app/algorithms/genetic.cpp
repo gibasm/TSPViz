@@ -5,6 +5,11 @@
 #include <list>
 #include <algorithm>
 #include <spdlog/spdlog.h>
+#include <cassert>
+
+#include "../util/perf_clock.hpp"
+
+extern PerfClock perf_clock;
 
 static std::random_device r;
 static std::mt19937 e(r());
@@ -29,21 +34,28 @@ void GeneticAlgorithm::solve() {
 
     selected = std::make_unique<bool[]>(population_size);
     costs = std::make_unique<float[]>(population_size);
+    
+    double total_time_ms = 0.0;
 
     for(size_t iteration = 0; iteration < max_iterations; ++iteration) {
         if(ga_stop) break;
+        
+        perf_clock.start();
 
         rate_individuals();
         select_parents();
         crossover();
         mutate();
 
+        perf_clock.stop();
+        total_time_ms += perf_clock.get_time_delta_ms();
 
         std::this_thread::sleep_for(std::chrono::milliseconds(iteration_delay_ms));
         spdlog::debug("iteration #{} (best path cost: {})", iteration+1, global_best_cost);
     }
 
-    spdlog::debug("Best path cost found: {}", global_best_cost);
+    spdlog::info("Best path cost found: {}", global_best_cost);
+    spdlog::info("Total time of execution: {0:.2f}ms", total_time_ms);
     spdlog::debug("Job finished");
 }
 
@@ -87,8 +99,11 @@ void GeneticAlgorithm::rate_individuals() {
 
 /* TODO: implement other selection methods */
 void GeneticAlgorithm::select_parents() {
-    /* clear the parents vector */
-    parents.clear();
+    /* empty the mating_pool */ 
+    while(!this->mating_pool.empty()) {
+        this->mating_pool.pop();
+    }
+
     /* fill the selected[] array with flase values */
     std::fill(selected.get(), selected.get() + population_size, false);
 
@@ -96,7 +111,7 @@ void GeneticAlgorithm::select_parents() {
     std::uniform_int_distribution<size_t> dist(0, population_size-1);
 
     /* choose (population/2) individuals */
-    for(size_t i = 0; i < (population_size/2); ++i) {
+    while(this->mating_pool.size() < ((population_size / 2UL) + 1UL)) {
         size_t k = dist(e);
 
         /* for k random individuals, choose the best */
@@ -116,7 +131,7 @@ void GeneticAlgorithm::select_parents() {
             }
         }
 
-        parents.push_back(population.at(best_index));
+        mating_pool.push(population.at(best_index));
 
         /* mark found individual as selected */
         selected[best_index] = true;
@@ -125,22 +140,45 @@ void GeneticAlgorithm::select_parents() {
 
 void GeneticAlgorithm::crossover() {
     population.clear();
+ 
+    const auto crossover_thread_func = [&] () {
+        while(this->mating_pool.size() >= 2UL) {
 
-    for(size_t i = 0; i < (population_size / 2); ++i) {
-        auto children = crossover_method->crossover({
-            parents.at(i % (population_size / 2)), 
-            parents.at( (i+1) % (population_size / 2) )
-        });
-        
-        for(auto child : children) {
-            population.push_back(child);
+            this->mating_pool_mtx.lock();
+            // check if there are still any parents in the mating pool
+            if(this->mating_pool.size() >= 2UL) {
+
+                auto parentA = this->mating_pool.front();
+                this->mating_pool.pop();
+                
+                auto parentB = this->mating_pool.front();
+                // we don't pop the parentB because we want to leave it in the mating pool for now
+                auto children = this->crossover_method->crossover({parentA, parentB});
+
+                this->mating_pool_mtx.unlock();
+
+                for(auto child : children) {
+                    this->population.push_back(child);
+                }
+            } else {
+                this->mating_pool_mtx.unlock();
+            }
         }
+    };
+
+    const auto n_threads = std::thread::hardware_concurrency();
+    assert(n_threads > 2UL);
+
+    for(size_t i = 0; i < n_threads - 2UL; ++i) {
+        std::thread(crossover_thread_func).join();
     }
+
+    while(this->mating_pool.size() >= 2UL) { asm volatile ("nop"); }
 }
 
 void GeneticAlgorithm::mutate() {
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-
+    
     for(size_t i = 0; i < population_size; ++i) {
         /* choose to mutate an individual with p_mutate probability */
         if(dist(e) <= p_mutation) {

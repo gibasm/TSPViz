@@ -4,7 +4,6 @@
 #include "gfx/window.hpp"
 #include "gfx/graph.hpp"
 #include "instance.hpp"
-#include "util/perf_clock.hpp"
 #include "algorithms/tsp_solver.hpp"
 #include <thread>
 
@@ -39,7 +38,6 @@ private:
     MainWindow window;
     std::unique_ptr<TSPSolver> solver;
     std::unique_ptr<Graph> graph;   
-    PerfClock perf_clock;
     TSPInstance instance;
 
     std::thread window_thread;

@@ -4,6 +4,9 @@
 #include "tsp_solver.hpp"
 #include "mutator.hpp"
 #include "crossover.hpp"
+#include <queue>
+#include <thread>
+#include <mutex>
 
 extern bool ga_stop;
 
@@ -42,6 +45,9 @@ private:
     float global_best_cost;
 
     unsigned iteration_delay_ms = 0;
+    
+    std::mutex mating_pool_mtx;
+    std::queue<Phenotype> mating_pool;
 
     friend class GeneticAlgorithmBuilder;
 };

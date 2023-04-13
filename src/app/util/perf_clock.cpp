@@ -1,5 +1,7 @@
 #include "perf_clock.hpp"
 
+PerfClock perf_clock = PerfClock();
+
 double PerfClock::get_time_delta_ms() const {
     return std::chrono::duration<double, std::milli>(end_tp - start_tp).count();
 }

@@ -59,4 +59,6 @@ public:
     }   
 };
 
+extern PerfClock perf_clock;
+
 #endif /* PERF_CLOCK_HPP */

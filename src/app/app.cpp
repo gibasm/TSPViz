@@ -4,8 +4,11 @@
 #include "util/ini_loader.hpp"
 #include "algorithms/solver_factory.hpp"
 #include <spdlog/spdlog.h>
+#include "util/perf_clock.hpp"
 
 static const char* INI_FILE_NAME = "config.ini";
+
+extern PerfClock perf_clock;
 
 static constexpr WindowConfig config = {
     "TSPViz",
@@ -40,11 +43,7 @@ void App::init_SDL() {
 
 
 void App::run() {
-    perf_clock.start();
     solver->solve();
-    perf_clock.stop();
 
     window_thread.join();
-
-    spdlog::info("Time elapsed: {} ms", perf_clock.get_time_delta_ms());
 }   
