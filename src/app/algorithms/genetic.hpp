@@ -45,7 +45,11 @@ private:
     float global_best_cost;
 
     unsigned iteration_delay_ms = 0;
-    
+    const unsigned n_threads = std::thread::hardware_concurrency();
+
+    unsigned mutation_no;
+    std::mutex mutation_no_mtx;
+
     std::mutex mating_pool_mtx;
     std::queue<Phenotype> mating_pool;
 
