@@ -1,4 +1,5 @@
 #include "genetic.hpp"
+#include <cstdlib>
 #include <random>
 #include <chrono>
 #include <thread>
@@ -17,7 +18,9 @@ static std::mt19937 e(r());
 bool ga_stop = false;
 
 GeneticAlgorithm::GeneticAlgorithm(TSPInstance& instance, Graph& graph)
-:TSPSolver(instance, graph) {}
+:TSPSolver(instance, graph) {
+    assert(n_threads > 2UL);
+}
 
 void GeneticAlgorithm::solve() {
     spdlog::debug("Running genetic algorithm...");
@@ -166,9 +169,6 @@ void GeneticAlgorithm::crossover() {
         }
     };
 
-    const auto n_threads = std::thread::hardware_concurrency();
-    assert(n_threads > 2UL);
-
     for(size_t i = 0; i < n_threads - 2UL; ++i) {
         std::thread(crossover_thread_func).join();
     }
@@ -177,14 +177,30 @@ void GeneticAlgorithm::crossover() {
 }
 
 void GeneticAlgorithm::mutate() {
+    this->mutation_no = 0;
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-    
-    for(size_t i = 0; i < population_size; ++i) {
-        /* choose to mutate an individual with p_mutate probability */
-        if(dist(e) <= p_mutation) {
-            population.at(i).mutate(*mutator);
+
+    const auto mutation_thread_func = [&] () {
+        while(this->mutation_no < population_size) {
+            this->mutation_no_mtx.lock();
+            unsigned i = this->mutation_no;
+            ++(this->mutation_no);
+            this->mutation_no_mtx.unlock();
+            
+            /* choose to mutate an individual with p_mutate probability */
+            if(dist(e) <= p_mutation) {
+                population.at(i).mutate(*mutator);
+            }
         }
+        
+        this->mutation_no_mtx.unlock();
+    };
+    
+    for(size_t i = 0; i < n_threads - 2UL; ++i) {
+        std::thread(mutation_thread_func).join();
     }
+
+    while(this->mutation_no < population_size) { asm volatile ("nop"); }
 }
 
 void GeneticAlgorithm::select_best_path(const std::vector<size_t>& new_best) {
