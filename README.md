@@ -90,3 +90,9 @@ make
 ```
 ctest
 ```
+
+### Race conditions, locks
+
+1. ./src/app/algorithms/genetic.cpp:144 - multithreaded crossover, mutex lock on the mating pool queue
+
+2. ./src/app/algorithms/genetic.cpp:179 - multithreaded mutation, mutex lock on the index of potentially mutated individual 
